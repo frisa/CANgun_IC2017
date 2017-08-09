@@ -1,0 +1,644 @@
+﻿<Window x:Class="cangun.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local ="clr-namespace:cangun"
+        xmlns:local1 ="clr-namespace:cangun.ViewModel"
+        Title="Can Gun" Height="1057" Width="1706" WindowStartupLocation="CenterScreen" Icon="/cangun;component/bender.ico">
+    <Window.Resources>
+        <Style TargetType="{x:Type ListBox}">
+            <Style.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#FF4D6383"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="White"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="#FF4D6383"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="#FF525252"/>
+            </Style.Resources>
+        </Style>
+        <Style x:Key="ProjectsSelectedItemColor" TargetType="{x:Type ListBoxItem}">
+            <Style.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent"/>
+            </Style.Resources>
+        </Style>
+        <SolidColorBrush x:Key="StandardSolidColorBrush" Color="Blue" />
+        <LinearGradientBrush x:Key="EnvironmentBackground" StartPoint="0.5,0" EndPoint="0.5,1">
+            <GradientStop Color="#293955"/>
+            <GradientStop Color="#35496a" Offset="0.5"/>
+            <GradientStop Color="#35496a" Offset="0.5"/>
+            <GradientStop Color="#293955" Offset="1"/>
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="MenuBackgroundGradient" EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#FF96ABD1" Offset="0" />
+            <GradientStop Color="#FFCFD4D8" Offset="1" />
+        </LinearGradientBrush>
+        <SolidColorBrush x:Key="ToolBackgroundSolid" Color="#FFA1AFC4"/>
+        <SolidColorBrush x:Key="ToolPanelBackgroundSolid" Color="#FFCDD6E8"/>
+        <SolidColorBrush x:Key="StatusBarBackgroundSolid" Color="#FF2E3955"/>
+
+        <SolidColorBrush x:Key="PanelHeaderBackgroundSolid" Color="#FF4D6383"/>
+
+        <local1:CSolutionViewModel x:Key="SolutionViewModel" Path="C:\Solution.gun" />
+        <CollectionViewSource x:Key="cvsProjects" Source="{Binding Path=Projects, Source={StaticResource SolutionViewModel}}" />
+        <CollectionViewSource x:Key="cvsProjectsMessages" Source="{Binding Path=Messages, Source={StaticResource cvsProjects}}" />
+        <CollectionViewSource x:Key="cvsProjectsMRs" Source="{Binding Path=ProjectDtMRs, Source={StaticResource cvsProjects}}" />
+    </Window.Resources>
+    <Grid DataContext="{StaticResource SolutionViewModel}" Background="{StaticResource EnvironmentBackground}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="50" />
+            <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="915*" />
+            <ColumnDefinition Width="155*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="31*" />
+            <RowDefinition Height="215*" />
+            <RowDefinition Height="25" />
+            <RowDefinition Height="25" />
+            <RowDefinition Height="238*" />
+            <RowDefinition Height="25" />
+            <RowDefinition Height="132*" />
+            <RowDefinition Height="25" />
+            <RowDefinition Height="85*" />
+        </Grid.RowDefinitions>
+        <Menu Height="23" Name="mMain" Margin="0,1" Grid.ColumnSpan="4" Background="{StaticResource MenuBackgroundGradient}">
+                <MenuItem Header="File">
+                    <MenuItem Command="{Binding Path=LoadSolution}" Header="Open" Height="23" Width="Auto" CommandParameter="{Binding Path=Path}">
+                        <MenuItem.Icon>
+                            <Image Source="/cangun;component/Assets/open.ico" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Command="{Binding Path=SaveSolution}" Header="Save" Height="23" Width="Auto" CommandParameter="{Binding Path=Path}">
+                        <MenuItem.Icon>
+                        <Image Source="/cangun;component/Assets/save.ico" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+                <MenuItem Command="{Binding Path=Projects/LoadDbc}" Header="Database">
+                    <MenuItem Command="{Binding Path=Projects/LoadDbc}" Header="Load DBC" Height="23">
+                        <MenuItem.Icon>
+                        <Image Source="/cangun;component/Assets/database.ico" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+                <MenuItem Header="Simulation">
+                    <MenuItem Command="{Binding Path=Start}" Header="Start" Height="20">
+                        <MenuItem.Icon>
+                        <Image Source="/cangun;component/Assets/play.ico" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Command="{Binding Path=Stop}" Header="Stop" Height="20">
+                        <MenuItem.Icon>
+                        <Image Source="/cangun;component/Assets/stop.ico" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+            </Menu>
+        <ToolBar Name="toolBar1" Grid.Row="1" Grid.ColumnSpan="4" Background="{StaticResource ToolBackgroundSolid}">
+                <Button Command="{Binding Path=LoadSolution}" CommandParameter="{Binding ElementName=tbSolutionFile, Path=Text}">
+                <Image Width="20" Height="Auto" Source="/cangun;component/Assets/open.ico" />
+                </Button>
+                <Button Command="{Binding Path=SaveSolution}" CommandParameter="{Binding ElementName=tbSolutionFile, Path=Text}">
+                <Image Width="20" Height="Auto" Source="/cangun;component/Assets/save.ico" />
+                </Button>
+                <Label Content="Solution File: " />
+                <TextBox Name="tbSolutionFile" Text="{Binding Path=Path}"/>
+                <Separator />
+                <Button Command="{Binding Path=Projects/LoadDbc}" CommandParameter="{Binding ElementName=tbDbcFilePath, Path=Text}">
+                <Image Width="20" Height="Auto" Source="/cangun;component/Assets/database.ico" />
+                </Button>
+        </ToolBar>
+
+        <ListBox Name="lbProjects" Width="Auto" ItemsSource="{Binding Path=Projects}" IsSynchronizedWithCurrentItem="True" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="2" Background="WhiteSmoke" Grid.ColumnSpan="2" SelectedItem="{Binding Path=SolutionCurrentProject}" Grid.RowSpan="2">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/cangun;component/Assets/folder.ico" Width="25" Height="Auto" />
+                        <TextBlock Margin="3" Text="{Binding ProjectName}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+            <TabControl Background="{StaticResource PanelHeaderBackgroundSolid}" Name="tabControl1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="Auto" Height="Auto" Grid.Column="2" Grid.Row="3" Grid.RowSpan="8">
+            <TabItem Header="Modification Requests Browser">
+                <Grid Height="Auto" Name="grid4" Width="Auto">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="91" />
+                        <ColumnDefinition Width="420*" />
+                        <ColumnDefinition Width="710*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="33" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="425*" />
+                        <RowDefinition Height="28" />
+                        <RowDefinition Height="200" />
+                    </Grid.RowDefinitions>
+                    <ToolBar Height="Auto" HorizontalAlignment="Stretch" Name="tbMR" Background="{Binding Source={StaticResource ToolBackgroundSolid}}" VerticalAlignment="Stretch" HorizontalContentAlignment="Stretch" Grid.Row="1" Grid.ColumnSpan="2">
+                        <Button Command="{Binding Path=Projects/LoadMRDB}" CommandParameter="{Binding Path=Projects/ProjectPathMRDB}">
+                            <Image Width="16" Height="Auto" Source="/cangun;component/Assets/refresh.ico" />
+                        </Button>
+                        <Button Command="{Binding Path=Projects/Filter}">
+                            <Image Width="16" Height="Auto" Source="/cangun;component/Assets/filter.ico" />
+                        </Button>
+                        <Button Command="{Binding Path=Projects/ClearFilter}">
+                            <Image Width="16" Height="Auto" Source="/cangun;component/Assets/clearfilter.ico" />
+                        </Button>
+                        <Button Command="{Binding Path=Projects/AddToFav}">
+                            <Image Width="16" Height="Auto" Source="/cangun;component/Assets/Favourites.ico" />
+                        </Button>
+                        <Label Content="Status:" Height="Auto" HorizontalAlignment="Left" Name="lblStatus" VerticalAlignment="Stretch" HorizontalContentAlignment="Stretch" Foreground="White" Grid.ColumnSpan="2" />
+                        <TextBox Grid.Column="1" Height="Auto" HorizontalAlignment="Stretch" Margin="3" Name="tbFilterOutput" VerticalAlignment="Stretch" Grid.Row="1" Text="{Binding Path=Projects/FilterOutString}" Width="200" />
+                    </ToolBar>
+                    <Label Content="Modification Requests" Height="Auto" HorizontalAlignment="Left" Name="lblMRs" VerticalAlignment="Stretch" HorizontalContentAlignment="Stretch" Foreground="White" Grid.ColumnSpan="2" />
+                    <DataGrid AutoGenerateColumns="False" Grid.Row="6" Height="Auto" HorizontalAlignment="Stretch" Name="dgMRs" VerticalAlignment="Stretch" Width="Auto" Grid.ColumnSpan="2" ItemsSource="{Binding Path=Projects/ProjectDtMRs}" CanUserResizeRows="False" SelectedItem="{Binding Path=Projects/drvMR}" RowHeight="22" Margin="2" Grid.RowSpan="1">
+                        <DataGrid.Resources>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="TextWrapping" Value="NoWrap" />
+                            </Style>
+                        </DataGrid.Resources>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Path=MeldungsNr}" Header="MR" Width="Auto" />
+                            <DataGridTextColumn Binding="{Binding Path=Titel}" Header="Title" Width="150" />
+                            <DataGridTextColumn Binding="{Binding Path=Produkt}" Header="Project" />
+                            <DataGridTextColumn Binding="{Binding Path=Inhalt}" Header="Content" Width="150" />
+                            <DataGridTextColumn Binding="{Binding Path=Zustand}" Header="Status" Width="150" />
+                            <DataGridTextColumn Binding="{Binding Path=Bezugsdokument}" Header="File" Width="150" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <TextBox Grid.Row="2" Height="Auto" HorizontalAlignment="Stretch" Name="tbMrFilter" VerticalAlignment="Stretch" Width="Auto" Grid.ColumnSpan="1" Grid.Column="1" Margin="2" Text="{Binding Path=Projects/FilterMrString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TabIndex="1" />
+                    <TextBox Grid.Row="3" Height="Auto" HorizontalAlignment="Stretch" Name="tbTitleFilter" VerticalAlignment="Stretch" Width="Auto" Grid.ColumnSpan="1" Grid.Column="1" Margin="2" Text="{Binding Path=Projects/FilterTitelString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TabIndex="2" />
+                    <TextBox Grid.Row="4" Height="Auto" HorizontalAlignment="Stretch" Name="tbContentFilter" VerticalAlignment="Stretch" Width="Auto" Grid.ColumnSpan="1" Grid.Column="1" Margin="2" Text="{Binding Path=Projects/FilterContentString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TabIndex="3" />
+                    <Grid Grid.Column="2" Grid.Row="2" Height="Auto" HorizontalAlignment="Stretch" Name="grid5" VerticalAlignment="Stretch" Width="Auto" Background="{StaticResource EnvironmentBackground}" DataContext="{Binding Path=Projects/ActualMR}" Grid.RowSpan="7">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="37" />
+                            <ColumnDefinition Width="33" />
+                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="36" />
+                            <ColumnDefinition Width="507*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="28" />
+                            <RowDefinition Height="28" />
+                            <RowDefinition Height="28" />
+                            <RowDefinition Height="28" />
+                            <RowDefinition Height="28" />
+                            <RowDefinition Height="28" />
+                            <RowDefinition Height="28" />
+                            <RowDefinition Height="28" />
+                            <RowDefinition Height="157*" />
+                            <RowDefinition Height="228*" />
+                        </Grid.RowDefinitions>
+                        <TabControl Grid.Row="9" Height="Auto" HorizontalAlignment="Stretch" Name="tabControl2" VerticalAlignment="Stretch" Width="Auto" Grid.ColumnSpan="6">
+                            <TabItem Header="Comments" Name="Comments" Margin="0">
+                                <Grid Background="{StaticResource PanelHeaderBackgroundSolid}">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="25" />
+                                        <RowDefinition Height="22*" />
+                                        <RowDefinition Height="150*" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="380" />
+                                        <ColumnDefinition Width="72" />
+                                        <ColumnDefinition Width="69" />
+                                        <ColumnDefinition Width="50" />
+                                        <ColumnDefinition Width="103*" />
+                                    </Grid.ColumnDefinitions>
+                                    <DataGrid AutoGenerateColumns="False" Height="Auto" HorizontalAlignment="Stretch" Name="dataGrid3" VerticalAlignment="Stretch" Width="Auto" Grid.RowSpan="3" Margin="2" ItemsSource="{Binding Path=Comments}" IsSynchronizedWithCurrentItem="True" RowHeight="22">
+                                        <DataGrid.Resources>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="TextWrapping" Value="NoWrap" />
+                                            </Style>
+                                        </DataGrid.Resources>
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Binding="{Binding Path=Modul}" Header="Modul" Width="Auto" />
+                                            <DataGridTextColumn Binding="{Binding Path=Comment}" Header="Comment" Width="150" />
+                                            <DataGridTextColumn Binding="{Binding Path=Author}" Header="Author" />
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                    <TextBox Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="1" Height="Auto" HorizontalAlignment="Stretch" Margin="2" Name="textBox10" VerticalAlignment="Stretch" Width="Auto" Grid.RowSpan="2" TextWrapping="Wrap" Text="{Binding Path=Comments/Comment}" />
+                                    <Label Content="Modul" Grid.Column="1" Grid.RowSpan="2" Height="28" HorizontalAlignment="Left" Name="label23" VerticalAlignment="Top" Foreground="White" />
+                                    <Label Content="Author" Grid.Column="3" Grid.RowSpan="1" Height="Auto" HorizontalAlignment="Left" Margin="0" Name="label24" VerticalAlignment="Stretch" Foreground="White" />
+                                    <TextBox Grid.Column="2" Grid.ColumnSpan="1" Grid.RowSpan="1" Height="Auto" HorizontalAlignment="Stretch" Margin="2" Name="textBox11" VerticalAlignment="Stretch" Width="Auto" Text="{Binding Path=Comments/Modul}" />
+                                    <TextBox Grid.Column="4" Grid.RowSpan="1" Height="Auto" HorizontalAlignment="Stretch" Margin="2" Name="textBox12" VerticalAlignment="Stretch" Width="Auto" Text="{Binding Path=Comments/Author}" />
+                                </Grid>
+                            </TabItem>
+                            <TabItem Header="CCB">
+                                <Grid Background="{StaticResource PanelHeaderBackgroundSolid}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="300" />
+                                        <ColumnDefinition Width="62" />
+                                        <ColumnDefinition Width="100" />
+                                        <ColumnDefinition Width="50" />
+                                        <ColumnDefinition Width="103*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="25" />
+                                        <RowDefinition Height="22*" />
+                                        <RowDefinition Height="150*" />
+                                    </Grid.RowDefinitions>
+                                    <DataGrid AutoGenerateColumns="False" Grid.RowSpan="3" Height="Auto" HorizontalAlignment="Stretch" Margin="2" Name="dataGrid4" VerticalAlignment="Stretch" Width="Auto" ItemsSource="{Binding Path=CCBs}">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Binding="{Binding Path=Author}" Header="Author" />
+                                            <DataGridTextColumn Binding="{Binding Path=Result}" Header="Result" />
+                                            <DataGridTextColumn Binding="{Binding Path=State}" Header="State" />
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                    <TextBox Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="1" Grid.RowSpan="2" Height="Auto" HorizontalAlignment="Stretch" Margin="2" Name="textBox13" VerticalAlignment="Stretch" Text="{Binding Path=CCBs/Result}" />
+                                    <Label Content="Decision" Foreground="White" Grid.Column="1" Grid.RowSpan="2" Height="28" HorizontalAlignment="Left" Name="label27" VerticalAlignment="Top" />
+                                    <Label Content="Author" Foreground="White" Grid.Column="3" Grid.RowSpan="1" Height="Auto" HorizontalAlignment="Left" Margin="0" Name="label28" VerticalAlignment="Stretch" />
+                                    <TextBox Grid.Column="2" Grid.ColumnSpan="1" Grid.RowSpan="1" Height="Auto" HorizontalAlignment="Stretch" Margin="2" Name="textBox14" VerticalAlignment="Stretch" Width="Auto" Text="{Binding Path=CCBs/State}" />
+                                    <TextBox Grid.Column="4" Grid.RowSpan="1" Height="Auto" HorizontalAlignment="Stretch" Margin="2" Name="textBox15" VerticalAlignment="Stretch" Width="Auto" Text="{Binding Path=CCBs/Author}" />
+                                </Grid>
+                            </TabItem>
+                            <TabItem Header="Measurements" IsEnabled="True">
+                                <Grid Background="{StaticResource PanelHeaderBackgroundSolid}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="436" />
+                                        <ColumnDefinition Width="50" />
+                                        <ColumnDefinition Width="100" />
+                                        <ColumnDefinition Width="50" />
+                                        <ColumnDefinition Width="103*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="25" />
+                                        <RowDefinition Height="22*" />
+                                        <RowDefinition Height="150*" />
+                                    </Grid.RowDefinitions>
+                                    <DataGrid AutoGenerateColumns="False" Grid.RowSpan="3" Height="Auto" HorizontalAlignment="Stretch" Margin="2" Name="dataGrid5" VerticalAlignment="Stretch" Width="Auto" ItemsSource="{Binding Path=Measurements}">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Binding="{Binding Path=Author}" Header="Author" />
+                                            <DataGridTextColumn Header="Module" Binding="{Binding Path=Module}" />
+                                            <DataGridTextColumn Header="State" Binding="{Binding Path=State}" />
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                    <TextBox Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="1" Grid.RowSpan="2" Height="Auto" HorizontalAlignment="Stretch" Margin="2" Name="textBox16" VerticalAlignment="Stretch" Width="Auto" Text="{Binding Path=Measurements/State}" />
+                                    <Label Content="Modul" Foreground="White" Grid.Column="1" Grid.RowSpan="2" Height="28" HorizontalAlignment="Left" Name="label29" VerticalAlignment="Top" />
+                                    <Label Content="Author" Foreground="White" Grid.Column="3" Grid.RowSpan="1" Height="Auto" HorizontalAlignment="Left" Margin="0" Name="label30" VerticalAlignment="Stretch" />
+                                    <TextBox Grid.Column="2" Grid.ColumnSpan="1" Grid.RowSpan="1" Height="Auto" HorizontalAlignment="Stretch" Margin="2" Name="textBox17" VerticalAlignment="Stretch" Width="Auto" Text="{Binding Path=Measurements/Module}" />
+                                    <TextBox Grid.Column="4" Grid.RowSpan="1" Height="Auto" HorizontalAlignment="Stretch" Margin="2" Name="textBox18" VerticalAlignment="Stretch" Width="Auto" Text="{Binding Path=Measurements/Author}" />
+                                </Grid>
+                            </TabItem>
+                            <TabItem Header="Tests" IsEnabled="False">
+                                <Grid Background="{StaticResource PanelHeaderBackgroundSolid}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="436" />
+                                        <ColumnDefinition Width="50" />
+                                        <ColumnDefinition Width="100" />
+                                        <ColumnDefinition Width="50" />
+                                        <ColumnDefinition Width="103*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="25" />
+                                        <RowDefinition Height="22*" />
+                                        <RowDefinition Height="150*" />
+                                    </Grid.RowDefinitions>
+                                    <DataGrid AutoGenerateColumns="False" Grid.RowSpan="3" Height="Auto" HorizontalAlignment="Stretch" Margin="2" Name="dataGrid6" VerticalAlignment="Stretch" Width="Auto" />
+                                    <TextBox Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="1" Grid.RowSpan="2" Height="Auto" HorizontalAlignment="Stretch" Margin="2" Name="textBox19" VerticalAlignment="Stretch" Width="Auto" />
+                                    <Label Content="Modul" Foreground="White" Grid.Column="1" Grid.RowSpan="2" Height="28" HorizontalAlignment="Left" Name="label31" VerticalAlignment="Top" />
+                                    <Label Content="Author" Foreground="White" Grid.Column="3" Grid.RowSpan="1" Height="Auto" HorizontalAlignment="Left" Margin="0" Name="label32" VerticalAlignment="Stretch" />
+                                    <TextBox Grid.Column="2" Grid.ColumnSpan="1" Grid.RowSpan="1" Height="Auto" HorizontalAlignment="Stretch" Margin="2" Name="textBox20" VerticalAlignment="Stretch" Width="Auto" />
+                                    <TextBox Grid.Column="4" Grid.RowSpan="1" Height="Auto" HorizontalAlignment="Stretch" Margin="2" Name="textBox21" VerticalAlignment="Stretch" Width="Auto" />
+                                </Grid>
+                            </TabItem>
+                            <TabItem Header="QA" IsEnabled="False">
+                                <Grid Background="{StaticResource PanelHeaderBackgroundSolid}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="436" />
+                                        <ColumnDefinition Width="50" />
+                                        <ColumnDefinition Width="100" />
+                                        <ColumnDefinition Width="50" />
+                                        <ColumnDefinition Width="103*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="25" />
+                                        <RowDefinition Height="22*" />
+                                        <RowDefinition Height="150*" />
+                                    </Grid.RowDefinitions>
+                                    <DataGrid AutoGenerateColumns="False" Grid.RowSpan="3" Height="Auto" HorizontalAlignment="Stretch" Margin="2" Name="dataGrid7" VerticalAlignment="Stretch" Width="Auto" />
+                                    <TextBox Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="1" Grid.RowSpan="2" Height="Auto" HorizontalAlignment="Stretch" Margin="2" Name="textBox22" VerticalAlignment="Stretch" Width="Auto" />
+                                    <Label Content="Modul" Foreground="White" Grid.Column="1" Grid.RowSpan="2" Height="28" HorizontalAlignment="Left" Name="label33" VerticalAlignment="Top" />
+                                    <Label Content="Author" Foreground="White" Grid.Column="3" Grid.RowSpan="1" Height="Auto" HorizontalAlignment="Left" Margin="0" Name="label34" VerticalAlignment="Stretch" />
+                                    <TextBox Grid.Column="2" Grid.ColumnSpan="1" Grid.RowSpan="1" Height="Auto" HorizontalAlignment="Stretch" Margin="2" Name="textBox23" VerticalAlignment="Stretch" Width="Auto" />
+                                    <TextBox Grid.Column="4" Grid.RowSpan="1" Height="Auto" HorizontalAlignment="Stretch" Margin="2" Name="textBox24" VerticalAlignment="Stretch" Width="Auto" />
+                                </Grid>
+                            </TabItem>
+                        </TabControl>
+                        <Label Content="Project" Grid.Row="1" Height="Auto" HorizontalAlignment="Left" Name="label16" VerticalAlignment="Stretch" Foreground="White" Grid.ColumnSpan="2" />
+                        <Label Content="State" Grid.Row="2" Grid.RowSpan="2" Height="Auto" HorizontalAlignment="Left" Name="label17" VerticalAlignment="Stretch" Foreground="White" />
+                        <Label Content="Type" Grid.Row="3" Height="Auto" HorizontalAlignment="Left" Name="label18" VerticalAlignment="Stretch" Foreground="White" />
+                        <Label Content="Author" Grid.Row="4" Grid.RowSpan="1" Height="Auto" HorizontalAlignment="Left" Name="label19" VerticalAlignment="Stretch" Foreground="White" Grid.ColumnSpan="2" />
+                        <Label Content="Hardware" Grid.Row="5" Height="Auto" HorizontalAlignment="Left" Name="label20" VerticalAlignment="Stretch" Foreground="White" Grid.ColumnSpan="2" />
+                        <TextBox Grid.Column="2" Grid.Row="1" Height="Auto" HorizontalAlignment="Stretch" Margin="3" Name="textBox3" VerticalAlignment="Stretch" Width="Auto" Grid.ColumnSpan="3" Padding="1" Text="{Binding Path=Project}" />
+                        <TextBox Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="2" Height="Auto" HorizontalAlignment="Stretch" Margin="3" Name="textBox4" VerticalAlignment="Stretch" Width="Auto" Padding="1" Text="{Binding Path=State}" />
+                        <TextBox Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="3" Height="Auto" HorizontalAlignment="Stretch" Margin="3" Name="textBox5" VerticalAlignment="Stretch" Width="Auto" Padding="1" />
+                        <TextBox Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="4" Height="Auto" HorizontalAlignment="Stretch" Margin="3" Name="textBox6" VerticalAlignment="Stretch" Width="Auto" Padding="1" Text="{Binding Path=Author}" />
+                        <TextBox Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="5" Height="Auto" HorizontalAlignment="Stretch" Margin="3" Name="textBox7" VerticalAlignment="Stretch" Width="Auto" Padding="1" />
+                        <Button Grid.Column="4" Grid.Row="6" Height="Auto" HorizontalAlignment="Stretch" Margin="2" Name="button7" VerticalAlignment="Stretch" Width="Auto">
+                            <Image Width="20" Height="Auto" Source="/cangun;component/Assets/open.ico" />
+                        </Button>
+                        <TextBox Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="6" Height="Auto" HorizontalAlignment="Stretch" Margin="3" Name="textBox8" VerticalAlignment="Stretch" Width="Auto" Text="{Binding Path=File}" />
+                        <Label Content="Files" Grid.Row="6" Height="Auto" HorizontalAlignment="Left" Name="label21" VerticalAlignment="Stretch" Foreground="White" />
+                        <Label Content="Content" Grid.Column="5" Grid.Row="1" Height="Auto" HorizontalAlignment="Left" Margin="0" Name="label22" VerticalAlignment="Stretch" Foreground="White" />
+                        <TextBox Grid.Column="5" Grid.Row="2" Grid.RowSpan="7" Height="Auto" HorizontalAlignment="Stretch" Margin="3" Name="textBox9" VerticalAlignment="Stretch" Width="Auto" Text="{Binding Path=Content}" TextWrapping="Wrap" AutoWordSelection="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" />
+                        <Label Content="Projects" Grid.ColumnSpan="2" Grid.Row="7" Height="Auto" HorizontalAlignment="Left" Name="label25" VerticalAlignment="Stretch" Foreground="White" />
+                        <TextBox Grid.Column="2" Grid.ColumnSpan="4" Height="Auto" HorizontalAlignment="Stretch" Margin="3" Name="textBox26" VerticalAlignment="Stretch" Width="Auto" Text="{Binding Path=Title}" />
+                        <TextBox Grid.ColumnSpan="2" Grid.RowSpan="1" Height="Auto" HorizontalAlignment="Stretch" Margin="3" Name="textBox27" VerticalAlignment="Stretch" Width="Auto" Text="{Binding Path=Number}" />
+                        <TextBox Grid.ColumnSpan="5" Grid.Row="8" Height="Auto" HorizontalAlignment="Stretch" Margin="2" Name="textBox2" VerticalAlignment="Stretch" Width="Auto" Text="{Binding Path=Project}" />
+                    </Grid>
+                    <Grid Grid.Column="2" HorizontalAlignment="Stretch" Margin="2" Name="grid6" VerticalAlignment="Stretch" Width="Auto" Background="{StaticResource ToolBackgroundSolid}" Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="104*" />
+                            <ColumnDefinition Width="217*" />
+                            <ColumnDefinition Width="95*" />
+                            <ColumnDefinition Width="204*" />
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Database File" Height="28" HorizontalAlignment="Left" Name="label14" VerticalAlignment="Top" Foreground="White" />
+                        <TextBox Height="Auto" HorizontalAlignment="Stretch" Margin="2" Name="textBox25" VerticalAlignment="Stretch" Width="Auto" Text="{Binding Path=Projects/ProjectPathMRDB}" Grid.ColumnSpan="1" Grid.Column="1" />
+                        <Label Content="Constant Filter" Height="Auto" HorizontalAlignment="Left" Name="label15" VerticalAlignment="Top" Foreground="White" Grid.Column="2" Margin="4,-2,0,0" />
+                        <TextBox Grid.Column="3" Height="Auto" HorizontalAlignment="Stretch" Margin="2" Name="textBox28" VerticalAlignment="Stretch" Text="{Binding Path=Projects/FilterConstantString}" />
+                    </Grid>
+                    <Label Content="MR Filter" Grid.ColumnSpan="2" Grid.Row="2" Grid.RowSpan="1" Height="Auto" HorizontalAlignment="Left" Margin="0" Name="label26" VerticalAlignment="Stretch" Foreground="White" />
+                    <Label Content="Title Filter" Grid.ColumnSpan="2" Grid.Row="3" Grid.RowSpan="1" Height="Auto" HorizontalAlignment="Left" Margin="0" Name="label000" VerticalAlignment="Stretch" Foreground="White" />
+                    <Label Content="Content Filter" Grid.ColumnSpan="2" Grid.Row="4" Grid.RowSpan="1" Height="Auto" HorizontalAlignment="Left" Margin="0" Name="label001" VerticalAlignment="Stretch" Foreground="White" />
+                    <Label Content="Status" Grid.ColumnSpan="2" Grid.Row="5" Grid.RowSpan="1" Height="Auto" HorizontalAlignment="Left" Margin="0" Name="label002" VerticalAlignment="Stretch" Foreground="White" />
+                    <ComboBox Grid.Column="1" Grid.Row="5" Height="Auto" HorizontalAlignment="Stretch" Name="cbStatus" VerticalAlignment="Stretch" Width="Auto" Margin="2" SelectedValue="{Binding Path=Projects/FilterStatus}" IsEditable="False">
+                        <ComboBoxItem Content="   " />
+                        <ComboBoxItem Content="NEW" />
+                        <ComboBoxItem Content="TST" />
+                        <ComboBoxItem Content="DEF" />
+                        <ComboBoxItem Content="SUB" />
+                        <ComboBoxItem Content="QA" />
+                        <ComboBoxItem Content="REJ" />
+                        <ComboBoxItem Content="TDO" />
+                        <ComboBoxItem Content="DNE" />
+                        <ComboBoxItem Content="RES" />
+                    </ComboBox>
+                    <DataGrid AutoGenerateColumns="False" CanUserResizeRows="False" Height="Auto" HorizontalAlignment="Stretch" Grid.Row="8" ItemsSource="{Binding Path=Projects/ProjectDtMRsFav}" Margin="2" Name="dgMrFav" RowHeight="22" SelectedItem="{Binding Path=Projects/drvMR}" VerticalAlignment="Stretch" Width="Auto" Grid.ColumnSpan="2">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Path=MeldungsNr}" Header="MR" Width="Auto" />
+                            <DataGridTextColumn Binding="{Binding Path=Titel}" Header="Title" Width="150" />
+                            <DataGridTextColumn Binding="{Binding Path=Produkt}" Header="Project" />
+                            <DataGridTextColumn Binding="{Binding Path=Zustand}" Header="Status" Width="150" />
+                        </DataGrid.Columns>
+                        <DataGrid.Resources>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="TextBlock.TextWrapping" Value="NoWrap" />
+                            </Style>
+                        </DataGrid.Resources>
+                    </DataGrid>
+                    <Label Content="Favourites" Grid.ColumnSpan="2" Grid.Row="7" Grid.RowSpan="1" Height="Auto" HorizontalAlignment="Left" Margin="0" Name="label260" VerticalAlignment="Stretch" Foreground="White" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="Messages" Name="tabItem1">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="25" />
+                                <RowDefinition Height="30" />
+                        <RowDefinition Height="494*" />
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="18*" />
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="84*" />
+                    </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="620" />
+                                <ColumnDefinition Width="710*" />
+                            </Grid.ColumnDefinitions>
+                            <DataGrid AutoGenerateColumns="False" Height="Auto" HorizontalAlignment="Stretch" Name="dgMessages" VerticalAlignment="Stretch" Width="Auto" ItemsSource="{Binding Path=Projects/Messages}" DataContext="{Binding}" IsSynchronizedWithCurrentItem="True" Grid.Row="2" Grid.RowSpan="3">
+                                <DataGrid.Columns>
+                                    <DataGridTemplateColumn x:Name="MessageIcon" Header="" CanUserResize="False">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                        <!--<Image Height="20" Width="20" Source="/cangun;component/Assets/message.ico" />-->
+                                        <Image Height="20" Width="20" Source="/cangun;component/Assets/sequence.ico" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTextColumn Binding="{Binding Path=MessageId, StringFormat=\{0:X2\}}" Header="Id" SortDirection="{x:Null}" />
+                                    <DataGridTextColumn Binding="{Binding Path=MessageName}" Header="Name" SortDirection="Descending" />
+                                    <DataGridTextColumn Binding="{Binding Path=MessageDlc}" Header="DLC" />
+                                    <DataGridTextColumn Binding="{Binding Path=MessageEcu}" Header="ECU" />
+                                    <DataGridTemplateColumn x:Name="MessageData" Header="Data [hex]" CanUserResize="False">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBox Text="{Binding Path=MessageData[0], StringFormat=\{0:X2\}}" BorderThickness="0.5" Width="25" />
+                                                    <TextBox Text="{Binding Path=MessageData[1], StringFormat=\{0:X2\}}" BorderThickness="0.5" Width="25" />
+                                                    <TextBox Text="{Binding Path=MessageData[2], StringFormat=\{0:X2\}}" BorderThickness="0.5" Width="25" />
+                                                    <TextBox Text="{Binding Path=MessageData[3], StringFormat=\{0:X2\}}" BorderThickness="0.5" Width="25" />
+                                                    <TextBox Text="{Binding Path=MessageData[4], StringFormat=\{0:X2\}}" BorderThickness="0.5" Width="25" />
+                                                    <TextBox Text="{Binding Path=MessageData[5], StringFormat=\{0:X2\}}" BorderThickness="0.5" Width="25" />
+                                                    <TextBox Text="{Binding Path=MessageData[6], StringFormat=\{0:X2\}}" BorderThickness="0.5" Width="25" />
+                                                    <TextBox Text="{Binding Path=MessageData[7], StringFormat=\{0:X2\}}" BorderThickness="0.5" Width="25" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                            <DataGridTextColumn Binding="{Binding Path=MessageComment}" Header="Comment" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                    <Label Content="Messages" Height="Auto" HorizontalAlignment="Stretch" Margin="0" Name="label3" VerticalAlignment="Stretch" Width="Auto" Foreground="White" />
+                            <Label Content="Signals" Grid.Column="1" Height="Auto" HorizontalAlignment="Stretch" Margin="0" Name="label4" VerticalAlignment="Stretch" Width="Auto" Foreground="White" />
+                    <ToolBar Name="toolBar2" Background="{Binding Source={StaticResource ToolBackgroundSolid}}" Margin="0" Grid.Row="1">
+                        <Button Command="{Binding Path=Observe}">
+                            <Image Width="16" Height="Auto" Source="/cangun;component/Assets/play.ico" />
+                        </Button>
+                        <Button Command="{Binding Path=ObserveStop}">
+                            <Image Width="16" Height="Auto" Source="/cangun;component/Assets/stop.ico" />
+                        </Button>
+                        <Label Content="Observation Time:" />
+                        <Label Content="{Binding Path=SolutionCurrentObservationTime}" />
+                        <Label Content="ms" />
+                    </ToolBar>
+                    <Label Content="Message Description" Grid.Row="5" Height="Auto" HorizontalAlignment="Stretch" Margin="0" Name="label9" VerticalAlignment="Stretch" Width="Auto" Foreground="White" />
+                    <TextBox Grid.Row="6" Height="Auto" HorizontalAlignment="Stretch" Name="tbMessageDescription" VerticalAlignment="Stretch" Width="Auto" Text="{Binding Path=Projects/Messages/MessageComment}" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" TextWrapping="Wrap" Grid.RowSpan="1" Background="#FFE2E2E2" />
+                    <Label Content="Signal Description" Grid.Column="1" Grid.Row="3" Grid.RowSpan="1" Height="Auto" HorizontalAlignment="Stretch" Margin="0" Name="label10" VerticalAlignment="Stretch" Foreground="White" />
+                    <TextBox Grid.Column="1" Grid.Row="4" Height="Auto" HorizontalAlignment="Stretch" Name="tbSignalDescription" VerticalAlignment="Stretch" Width="Auto" Text="{Binding Path=Projects/Messages/Signals/SignalComment}" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" TextWrapping="Wrap" Grid.RowSpan="3" Background="#FFE2E2E2" />
+                    <ToolBar Grid.Column="1" Grid.Row="1" Grid.RowSpan="1" Height="Auto" HorizontalAlignment="Stretch" Margin="0" Name="toolBar4" VerticalAlignment="Stretch" Width="Auto" Background="{Binding Source={StaticResource ToolBackgroundSolid}}">
+                    </ToolBar>
+                    <DataGrid AutoGenerateColumns="False" HorizontalAlignment="Stretch" Name="dgSignals" VerticalAlignment="Stretch" ItemsSource="{Binding Path=Projects/Messages/Signals}" IsSynchronizedWithCurrentItem="True" Grid.Column="1" Grid.Row="2" Margin="0">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn x:Name="SignalIcon" Header="" CanUserResize="False">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image Height="16" Width="16" Source="/cangun;component/Assets/signal.ico" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Binding="{Binding Path=SignalName}" Header="Name" />
+                            <DataGridTextColumn Binding="{Binding Path=SignalLenght}" Header="Lenght" />
+                            <DataGridTextColumn Binding="{Binding Path=SignalStartBit}" Header="StartBit" />
+                            <DataGridTextColumn Binding="{Binding Path=SignalIntel}" Header="Intel" />
+                            <DataGridTextColumn Binding="{Binding Path=SignalSigned}" Header="Signed" />
+                            <DataGridTextColumn Binding="{Binding Path=SignalValue,StringFormat=\{0:X2\}}" Header="Value [hex]" />
+                            <DataGridTextColumn Binding="{Binding Path=SignalValue}" Header="Value [dec]" />
+                            <DataGridTextColumn Binding="{Binding Path=SignalComment}" Header="Comment" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+                    </TabItem>
+                    <TabItem Header="Sequences">
+                        <Grid Height="Auto" Name="grid2" Width="Auto">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="25" />
+                                <RowDefinition Height="30" />
+                        <RowDefinition Height="351*" />
+                        <RowDefinition Height="25" />
+                                <RowDefinition Height="269*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="250" />
+                        <ColumnDefinition Width="730*" />
+                            </Grid.ColumnDefinitions>
+                            <DataGrid AutoGenerateColumns="False" Name="dgSequences" ItemsSource="{Binding Path=Projects/Sequences}" IsSynchronizedWithCurrentItem="True" SelectedItem="{Binding Path=SolutionCurrentSequence}" Grid.Row="2" Grid.ColumnSpan="2">
+                                <DataGrid.Columns>
+                                <DataGridTemplateColumn x:Name="SequenceIcon" Header="" CanUserResize="False">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                        <Image Height="20" Width="20" Source="/cangun;component/Assets/sequence.ico" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Binding="{Binding Path=SequenceName }" Header="Name" Width="250" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <DataGrid AutoGenerateColumns="False" HorizontalAlignment="Stretch" Name="dgSteps" VerticalAlignment="Stretch" Width="Auto" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding Path=Projects/Sequences/Steps}" DataContext="{Binding}" Grid.Column="2" Grid.Row="2" Grid.RowSpan="1">
+                                <DataGrid.Columns>
+                                    <DataGridTemplateColumn x:Name="StepIcon" Header="" CanUserResize="False">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                        <Image Height="20" Width="20" Source="/cangun;component/Assets/step.ico" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridComboBoxColumn Header="Command" Width="80" ItemsSource="{Binding Source={StaticResource SolutionViewModel}, Path=Commands}" SelectedValueBinding="{Binding Path=StepCommand}" />
+                            <DataGridTextColumn Binding="{Binding Path=StepTime}" Header="Time (manu.) [ms]" />
+                            <DataGridComboBoxColumn Header="Time [ms]" Width="80" ItemsSource="{Binding Source={StaticResource SolutionViewModel}, Path=Times}" SelectedValueBinding="{Binding Path=StepTime}" />
+                                    <DataGridTextColumn Binding="{Binding Path=StepValue}" Header="Value (manu.)" />
+                                    <DataGridComboBoxColumn Header="Value" Width="100" ItemsSource="{Binding Source={StaticResource SolutionViewModel}, Path=Values}" SelectedValueBinding="{Binding Path=StepValue}" />
+                            
+                                    <DataGridComboBoxColumn Header="Message" Width="150" ItemsSource="{Binding Source={StaticResource SolutionViewModel}, Path=Projects/Messages}" DisplayMemberPath="MessageName" SelectedValueBinding="{Binding Path=StepMessage}" />
+                                    <DataGridComboBoxColumn Header="Signal" Width="150" DisplayMemberPath="SignalName" SelectedValueBinding="{Binding Path=StepSignal}">
+                                        <DataGridComboBoxColumn.ElementStyle>
+                                            <Style TargetType="ComboBox">
+                                                <Setter Property="ItemsSource" Value="{Binding Path=StepSignals}" />
+                                            </Style>
+                                        </DataGridComboBoxColumn.ElementStyle>
+                                        <DataGridComboBoxColumn.EditingElementStyle>
+                                            <Style TargetType="ComboBox">
+                                                <Setter Property="ItemsSource" Value="{Binding Path=StepSignals}" />
+                                            </Style>
+                                        </DataGridComboBoxColumn.EditingElementStyle>
+                                    </DataGridComboBoxColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <DataGrid AutoGenerateColumns="False" Height="Auto" HorizontalAlignment="Stretch" Margin="0" Name="dgSendetMessages" VerticalAlignment="Stretch" Width="Auto" Grid.Row="4" Grid.Column="2" ItemsSource="{Binding Path=CurrentSendetMessages}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding Path=StartTime}" Header="Start Time" />
+                                <DataGridTextColumn Binding="{Binding Path=StopTime}" Header="StopTime" />
+                                <DataGridTextColumn Header="Id[hex]" Binding="{Binding Path=Message.MessageId, StringFormat=\{0:X\}}" />
+                                <DataGridTextColumn Header="Message Name" Binding="{Binding Path=Message.MessageName}" />
+                                <DataGridTemplateColumn x:Name="Data" Header="Data[hex]" CanUserResize="False" IsReadOnly="false">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBox Text="{Binding Path=Message.MessageData[0], StringFormat=\{0:X2\}}" BorderThickness="0.5" Width="25" />
+                                                <TextBox Text="{Binding Path=Message.MessageData[1], StringFormat=\{0:X2\}}" BorderThickness="0.5" Width="25" />
+                                                <TextBox Text="{Binding Path=Message.MessageData[2], StringFormat=\{0:X2\}}" BorderThickness="0.5" Width="25" />
+                                                <TextBox Text="{Binding Path=Message.MessageData[3], StringFormat=\{0:X2\}}" BorderThickness="0.5" Width="25" />
+                                                <TextBox Text="{Binding Path=Message.MessageData[4], StringFormat=\{0:X2\}}" BorderThickness="0.5" Width="25" />
+                                                <TextBox Text="{Binding Path=Message.MessageData[5], StringFormat=\{0:X2\}}" BorderThickness="0.5" Width="25" />
+                                                <TextBox Text="{Binding Path=Message.MessageData[6], StringFormat=\{0:X2\}}" BorderThickness="0.5" Width="25" />
+                                                <TextBox Text="{Binding Path=Message.MessageData[7], StringFormat=\{0:X2\}}" BorderThickness="0.5" Width="25" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                    </DataGrid>
+                            <Label Content="Sequences" Height="Auto" HorizontalAlignment="Stretch" Name="label1" VerticalAlignment="Stretch" Width="Auto" Foreground="White" Grid.ColumnSpan="2" />
+                            <Label Content="Steps" Grid.Column="2" Height="Auto" HorizontalAlignment="Stretch" Margin="0" Name="label2" VerticalAlignment="Stretch" Width="Auto" Foreground="White" />
+                            <Label Content="Sendet Messages" Grid.Column="2" Grid.Row="3" Height="Auto" HorizontalAlignment="Stretch" Margin="0" Name="label5" VerticalAlignment="Stretch" Width="Auto" Foreground="White" />
+                    <TextBox Grid.Row="4" Height="Auto" HorizontalAlignment="Stretch" Name="textBox1" VerticalAlignment="Stretch" Width="Auto" Text="{Binding Path=Projects/Sequences/SequenceComment}" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Grid.ColumnSpan="1" Background="#FFFFFFD8" />
+                    <Label Content="Comment for Sequence" Height="Auto" HorizontalAlignment="Stretch" Name="label6" VerticalAlignment="Stretch" Foreground="White" Grid.Row="3" Grid.ColumnSpan="2" />
+                    <ToolBar Grid.Row="1" Height="Auto" HorizontalAlignment="Stretch" Name="toolBar3" VerticalAlignment="Stretch" Width="Auto" Background="{Binding Source={StaticResource ToolBackgroundSolid}}" Grid.ColumnSpan="2">
+                        <Button Command="{Binding Path=Start}">
+                            <Image Width="16" Height="Auto" Source="/cangun;component/Assets/play.ico" />
+                        </Button>
+                        <Button Command="{Binding Path=Stop}">
+                            <Image Width="16" Height="Auto" Source="/cangun;component/Assets/stop.ico" />
+                        </Button>
+                        <Button Command="{Binding Path=Restart}">
+                            <Image Width="Auto" Height="Auto" Source="/cangun;component/Assets/refresh.ico" />
+                        </Button>
+                        <Label Content="Time:" Padding="2"/>
+                        <Label  Padding="2" Content="{Binding Path=SolutionCurrentTime}" />
+                        <Label Content=" ms " Padding="2"/>
+                        <Label Content="Seq:" Padding="2"/>
+                        <Label Padding="2" Content="{Binding Path=SolutionCurrentSequence.SequenceName}" FontWeight="Bold" />
+
+                    </ToolBar>
+                    <ToolBar Grid.Column="2" Grid.Row="1" Height="Auto" HorizontalAlignment="Stretch" Margin="0" Name="toolBar5" VerticalAlignment="Stretch" Width="Auto" Background="{Binding Source={StaticResource ToolBackgroundSolid}}">
+                        <Button Command="{Binding Path=Insert}" CommandParameter="{Binding ElementName=dgSteps, Path=SelectedIndex}">
+                            <Image Width="16" Height="Auto" Source="/cangun;component/Assets/insert.ico" />
+                        </Button>
+                    </ToolBar>
+                </Grid>
+                    </TabItem>
+        </TabControl>
+        <Label Content="Description for Project" Grid.Row="5" Height="Auto" HorizontalAlignment="Stretch" Name="label7" VerticalAlignment="Stretch" Background="{StaticResource PanelHeaderBackgroundSolid}" Foreground="White" Grid.ColumnSpan="2" />
+        <Label Content="Output" Grid.Row="7" Height="Auto" HorizontalAlignment="Stretch" Name="label8" VerticalAlignment="Stretch" Background="{StaticResource PanelHeaderBackgroundSolid}" Foreground="White" Grid.ColumnSpan="2" Grid.RowSpan="1" />
+        <TextBox Grid.Row="6" Height="Auto" HorizontalAlignment="Stretch" Name="tbDescription" VerticalAlignment="Stretch" Width="Auto" TextWrapping="Wrap" Text="{Binding Path=Projects/ProejctDescription}" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Grid.ColumnSpan="2" Background="#FFFFFFD8" Grid.RowSpan="1" />
+        <TextBox Grid.Row="8" Height="Auto" HorizontalAlignment="Stretch" Name="tbOutput" VerticalAlignment="Stretch" Width="Auto" Text="{Binding Path=SolutionLog}" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" AcceptsReturn="True" Grid.ColumnSpan="2" Grid.RowSpan="3" Background="#FFE2E2E2" />
+        <TextBox Grid.Row="4" Height="Auto" HorizontalAlignment="Stretch" Margin="0" Name="tbNewProject" VerticalAlignment="Stretch" Width="Auto" Grid.Column="1" />
+        <Button Grid.Row="4" Height="Auto" HorizontalAlignment="Stretch" Margin="0" Name="button1" VerticalAlignment="Stretch" Width="Auto" Command="{Binding Path=AddProject}" CommandParameter="{Binding ElementName=tbNewProject, Path=Text}">
+            <Image Source="/cangun;component/Assets/plus.ico" Width="20" />
+        </Button>
+        <Grid Grid.Column="3" Grid.Row="2" HorizontalAlignment="Stretch" Margin="2" Name="grid1" VerticalAlignment="Stretch" Width="Auto" Background="{Binding Source={StaticResource PanelHeaderBackgroundSolid}}" Grid.RowSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="60*" />
+                <ColumnDefinition Width="55*" />
+                <ColumnDefinition Width="52*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25" />
+                <RowDefinition Height="23" />
+                <RowDefinition Height="23" />
+                <RowDefinition Height="23" />
+                <RowDefinition Height="95*" />
+            </Grid.RowDefinitions>
+            <Label Content="Instrument Buttons" Height="Auto" HorizontalAlignment="Stretch" Name="label11" VerticalAlignment="Stretch" Foreground="White" Grid.ColumnSpan="3" />
+            <Button Content="Up" Grid.Column="1" Grid.Row="1" Height="Auto" HorizontalAlignment="Stretch" Margin="0" Name="button2" VerticalAlignment="Stretch" Width="Auto" Command="{Binding Path=SendMessage}" CommandParameter="1473_4_8_0_34_100" />
+            <Button Content="Menu+" Height="Auto" HorizontalAlignment="Stretch" Name="button3" Width="Auto" Grid.Row="2" CommandParameter="1473_4_8_0_9_100" Command="{Binding Path=SendMessage}" />
+            <Button Content="OK/Ret." Height="Auto" HorizontalAlignment="Stretch" Margin="0" Name="button4" VerticalAlignment="Stretch" Width="Auto" Grid.Column="1" Grid.Row="2" CommandParameter="1473_4_8_0_40_100" Command="{Binding Path=SendMessage}" />
+            <Button Content="Menu-" Height="Auto" HorizontalAlignment="Stretch" Margin="0" Name="button5" VerticalAlignment="Stretch" Width="Auto" Grid.Column="2" Grid.Row="2" Command="{Binding Path=SendMessage}" CommandParameter="1473_4_8_0_10_100" />
+            <Button Content="Down" Height="Auto" HorizontalAlignment="Stretch" Margin="0" Name="button6" VerticalAlignment="Stretch" Width="Auto" Grid.Column="1" Grid.Row="3" CommandParameter="1473_4_8_0_35_100" Command="{Binding Path=SendMessage}" />
+            
+        </Grid>
+        <Grid Grid.Column="3" Grid.Row="6" Height="Auto" HorizontalAlignment="Stretch" Margin="2" Name="grid3" VerticalAlignment="Stretch" Width="Auto" Grid.RowSpan="5" Background="#FFC7C7C7">
+            <TextBox Height="Auto" HorizontalAlignment="Stretch" Margin="0" Name="tbHelp" VerticalAlignment="Stretch" Width="Auto" Text="This application is used to send the sequences of CAN signals to the network (in panel Sequences) and can be also used to read the CAN messages from the network (in panel Messages) 1) New solution: After start the default path to the solution is set to &quot;C:\Solution.gun&quot; this path can be changed in textbox in tool panel. To save the actual solution press the save button. 2) Load solution: To load the solution file the button open should be pressed. Every soulution contains the extension *.gun. 3) Projects: There is possible to add more porject for solution, where every projects contains its own CAN database and Sequences. 4) Load DBC: To load the CAN database for the project there must be used the red button &quot;Load DBC&quot;" TextWrapping="WrapWithOverflow" Background="#FFFFFFD8" />
+        </Grid>
+        <Label Content="Help Description" Grid.Column="3" Grid.Row="5" Grid.RowSpan="2" Height="28" HorizontalAlignment="Left" Margin="0" Name="label12" VerticalAlignment="Top" Foreground="White" />
+        <StackPanel Grid.Column="2" Grid.Row="2" Height="Auto" HorizontalAlignment="Stretch" Margin="0" Name="stackPanel1" VerticalAlignment="Stretch" Width="Auto" Orientation="Horizontal">
+            <Label Content="{Binding Path=Projects/ProjectName}" Height="Auto" Name="label13" FontSize="16" Foreground="White" />
+            <Label Content="( with CAN database:" Height="Auto" Name="lbl21" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" />
+            <Label Content="{Binding Path=Projects/ProjectPathDbc}" Height="Auto" Name="lblDbcPath" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <Label Content=")" Height="Auto" Name="lbl20" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" />
+        </StackPanel>
+        <StackPanel Grid.Column="3" Grid.Row="4" Height="Auto" HorizontalAlignment="Stretch" Margin="0" Name="stackPanel2" VerticalAlignment="Stretch" Width="Auto" Orientation="Horizontal">
+            <Label Content="Clock   " Height="Auto" Name="lbl23" Foreground="White" Padding="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+            <Button Content="Start" Height="Auto" Name="btnClkStart" Width="35" Command="{Binding Path=ClkStart}" Margin="2" />
+            <Button Content="Stop" Height="Auto" Name="btnClkStop" Width="36" Command="{Binding Path=ClkStop}" Margin="2" />
+            <TextBox Grid.Column="3" Height="Auto" HorizontalAlignment="Center" Margin="0" Name="tbxClkTime" VerticalAlignment="Center" Width="Auto" Text="{Binding Path=ClkTime}" Padding="0" />
+            <Label Content="ms" Height="Auto" HorizontalAlignment="Stretch" Margin="0" Name="lbl24" VerticalAlignment="Center" Foreground="White" Padding="0" />
+        </StackPanel>
+    </Grid>
+</Window>
