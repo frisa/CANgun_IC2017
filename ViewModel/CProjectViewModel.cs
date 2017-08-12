@@ -7,10 +7,8 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Data;
 using System.Data.OleDb;
-using cangun.Model;
-using cangun.Model.MR;
 
-namespace cangun.ViewModel
+namespace cangun
 {
     [Serializable]
     public class CProjectViewModel : INotifyPropertyChanged

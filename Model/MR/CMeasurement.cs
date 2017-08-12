@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace cangun.Model.MR
+namespace cangun
 {
     [Serializable]
     public class CMRMeasurement : INotifyPropertyChanged

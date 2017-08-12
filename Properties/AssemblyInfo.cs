@@ -7,12 +7,12 @@ using System.Windows;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("cangun")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("CANgun")]
+[assembly: AssemblyDescription("The application provides some functionality for the CAN trafic")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Continental AG")]
-[assembly: AssemblyProduct("cangun")]
-[assembly: AssemblyCopyright("Copyright © Continental AG 2014")]
+[assembly: AssemblyCompany("Fridrichovsky")]
+[assembly: AssemblyProduct("CANgun")]
+[assembly: AssemblyCopyright("Copyright © Fridrichovsky 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

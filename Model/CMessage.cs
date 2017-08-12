@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace cangun.Model
+namespace cangun
 {
     [Serializable]
     public class CMessage : INotifyPropertyChanged

@@ -11,10 +11,14 @@ using vxlapi_NET20;
 using System.Runtime.InteropServices;
 using System.Collections;
 using System.Windows.Threading;
-using cangun.Model;
 
-namespace cangun.ViewModel
+namespace cangun
 {
+    /// <summary>
+    /// The highest level view model object to provide the main functionality
+    /// this object will be created by the XAML code in WPF
+    /// the serialization is needed to do the save functionality
+    /// </summary>
     [Serializable]
     public class CSolutionViewModel : INotifyPropertyChanged
     {
@@ -31,6 +35,9 @@ namespace cangun.ViewModel
         private CProjectViewModel _currentProjectViewModel;
         ObservableCollection<CProjectViewModel> _projects = new ObservableCollection<CProjectViewModel>();
 
+        /// <summary>
+        /// The path to the solution file *.gun
+        /// </summary>
         public string Path
         {
             get { return _path; }
@@ -40,16 +47,28 @@ namespace cangun.ViewModel
                 RaisePropertyChanged("Path");
             }
         }
+
+        /// <summary>
+        /// The description for the solution file, such as project name and customer
+        /// </summary>
         public string SolutionDescription
         {
             get { return _description; }
             set { _description = value; }
         }
+
+        /// <summary>
+        /// The storage for the loggin functionality
+        /// </summary>
         public string SolutionLog
         {
             get { return _log; }
             set { _log = value; }
         }
+
+        /// <summary>
+        /// The cloct current value for the running simulation
+        /// </summary>
         public int ClkTime
         {
             get { return _clkTime; }
@@ -59,6 +78,10 @@ namespace cangun.ViewModel
                 RaisePropertyChanged("ClkTime");
             }
         }
+        
+        /// <summary>
+        /// The start of the time meassurement, if the meassurement starts the start time is stored
+        /// </summary>
         public bool ClkActive
         {
             get { return _clkActive; }
@@ -70,12 +93,20 @@ namespace cangun.ViewModel
                 RaisePropertyChanged("ClkActive");
             }
         }
-
+        
+        /// <summary>
+        /// The Incremental logging functionality
+        /// </summary>
+        /// <param name="message"></param>
         public void log(string message)
         {
             SolutionLog = SolutionLog + message + "\n";
             RaisePropertyChanged("SolutionLog");
         }
+
+        /// <summary>
+        /// Like in Visual Studio the solution can contain more projects
+        /// </summary>
         public ObservableCollection<CProjectViewModel> Projects
         {
             get
@@ -88,24 +119,52 @@ namespace cangun.ViewModel
                 RaisePropertyChanged("Projects");
             }
         }
+
+        /// <summary>
+        /// The sequence commands which can be used by the sequence definition
+        /// </summary>
         ObservableCollection<String> _commands = new ObservableCollection<String>();
+
+        /// <summary>
+        /// The predefined sequence times
+        /// </summary>
         ObservableCollection<int> _times = new ObservableCollection<int>();
+
+        /// <summary>
+        /// The predefined sequence values
+        /// </summary>
         ObservableCollection<int> _values = new ObservableCollection<int>();
+
+        /// <summary>
+        /// Getter/ Setter for the sequence commands
+        /// </summary>
         public ObservableCollection<String> Commands
         {
             get { return _commands; }
             set { _commands = value; }
         }
+
+        /// <summary>
+        /// The Getter/Setter for the sequence times
+        /// </summary>
         public ObservableCollection<int> Times
         {
             get { return _times; }
             set { _times = value; }
         }
+
+        /// <summary>
+        /// Getter/Setter for the sequence values
+        /// </summary>
         public ObservableCollection<int> Values
         {
             get { return _values; }
             set { _values = value; }
         }
+
+        /// <summary>
+        /// Getter/ Setter for the current simulation time
+        /// </summary>
         public int SolutionCurrentTime
         {
             get { return _currentTime; }
@@ -116,6 +175,8 @@ namespace cangun.ViewModel
                 RaisePropertyChanged("SolutionCurrentTime");
             }
         }
+
+
         public int SolutionCurrentObservationTime
         {
             get { return _currentObservationTime; }
@@ -145,11 +206,11 @@ namespace cangun.ViewModel
 
         public CSolutionViewModel()
         {
-            _projects.Add(new CProjectViewModel { ProjectName = "Gen4" });
-            _projects.Add(new CProjectViewModel { ProjectName = "Gen31" });
-            //_projects.Add(new CProjectViewModel { ProjectName = "Roadmap PQ36" });
-            //_projects.Add(new CProjectViewModel { ProjectName = "Roadmap AU210" });
-            //_projects.Add(new CProjectViewModel { ProjectName = "Roadmap AU316" });
+            _projects.Add(new CProjectViewModel { ProjectName = "BMW Gen4" });
+            _projects.Add(new CProjectViewModel { ProjectName = "BMW Gen31" });
+            _projects.Add(new CProjectViewModel { ProjectName = "VW Roadmap PQ36" });
+            _projects.Add(new CProjectViewModel { ProjectName = "VW Roadmap AU210" });
+            _projects.Add(new CProjectViewModel { ProjectName = "VW Roadmap AU316" });
 
             _commands.Add("Set");
             _commands.Add("Set with ASR");

@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Data;
 
-namespace cangun.Model
+namespace cangun
 {
     [Serializable]
     public class CProject : INotifyPropertyChanged

@@ -2,8 +2,8 @@
 using System.ComponentModel;
 using System.Collections.ObjectModel;
 
-namespace cangun.Model.MR
-{
+namespace cangun
+{ 
     [Serializable]
     public class CMR : INotifyPropertyChanged
     {

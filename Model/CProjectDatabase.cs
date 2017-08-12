@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace cangun.Model
+namespace cangun
 {
     public static class CProjectDatabase
     {

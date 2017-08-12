@@ -2,7 +2,6 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local ="clr-namespace:cangun"
-        xmlns:local1 ="clr-namespace:cangun.ViewModel"
         Title="Can Gun" Height="1057" Width="1706" WindowStartupLocation="CenterScreen" Icon="/cangun;component/bender.ico">
     <Window.Resources>
         <Style TargetType="{x:Type ListBox}">
@@ -35,7 +34,7 @@
 
         <SolidColorBrush x:Key="PanelHeaderBackgroundSolid" Color="#FF4D6383"/>
 
-        <local1:CSolutionViewModel x:Key="SolutionViewModel" Path="C:\Solution.gun" />
+        <local:CSolutionViewModel x:Key="SolutionViewModel" Path="C:\Solution.gun" />
         <CollectionViewSource x:Key="cvsProjects" Source="{Binding Path=Projects, Source={StaticResource SolutionViewModel}}" />
         <CollectionViewSource x:Key="cvsProjectsMessages" Source="{Binding Path=Messages, Source={StaticResource cvsProjects}}" />
         <CollectionViewSource x:Key="cvsProjectsMRs" Source="{Binding Path=ProjectDtMRs, Source={StaticResource cvsProjects}}" />

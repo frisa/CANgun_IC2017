@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace cangun.ViewModel
+namespace cangun
 {
     [Serializable]
     public class CSentMessageViewModel : INotifyPropertyChanged

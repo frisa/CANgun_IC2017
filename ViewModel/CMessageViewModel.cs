@@ -2,9 +2,8 @@
 using System.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Collections;
-using cangun.Model;
 
-namespace cangun.ViewModel
+namespace cangun
 {
     [Serializable]
     public class CMessageViewModel : INotifyPropertyChanged
