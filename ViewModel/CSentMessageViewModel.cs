@@ -31,6 +31,12 @@ namespace cangun
             set { _signal = value; }
         }
 
+        /// <summary>
+        /// The message which has been sent ot the target, so the time stamp needs to be logged
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="start"></param>
+        /// <param name="stop"></param>
         public CSentMessageViewModel(CMessageViewModel message, int start, int stop)
         {
             _message = new CMessageViewModel() { MessageName = message.MessageName, MessageId = message.MessageId, MessageData = message.MessageData, MessageDlc = message.MessageDlc };

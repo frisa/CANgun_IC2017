@@ -151,8 +151,6 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.config" />
-    <None Include="AsrNM33.INI" />
-    <None Include="cangun_TemporaryKey.pfx" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -177,7 +175,6 @@
     <Resource Include="Assets\insert.ico" />
     <Resource Include="bender.ico" />
     <Resource Include="Assets\settings.ico" />
-    <Content Include="AsrNM33.dll" />
     <Resource Include="Assets\clearfilter.ico" />
     <Resource Include="Assets\filter.ico" />
     <Resource Include="Assets\Favourites.ico" />

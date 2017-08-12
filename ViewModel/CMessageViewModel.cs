@@ -62,6 +62,14 @@ namespace cangun
             get { return _message.Comment; }
             set { _message.Comment = value; }
         }
+
+        /// <summary>
+        /// Parse the message data to get the signal value
+        /// </summary>
+        /// <param name="byteMessage"></param>
+        /// <param name="iStartBit"></param>
+        /// <param name="iLength"></param>
+        /// <returns></returns>
         private UInt64 getSignalValue(byte[] byteMessage, int iStartBit, int iLength)
         {
             BitArray bitsMessage = new BitArray(byteMessage);

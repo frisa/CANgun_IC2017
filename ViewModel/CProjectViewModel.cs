@@ -65,6 +65,10 @@ namespace cangun
                 RaisePropertyChanged("ProjectDtMRsFav");
             }
         }
+
+        /// <summary>
+        /// To speed up the initial loading of the database, only the selected data of the chenge request record are shown
+        /// </summary>
         public DataRowView drvMR
         {
             get { return _drvMR; }
@@ -203,6 +207,10 @@ namespace cangun
         {
             return true;
         }
+
+        /// <summary>
+        /// The DBC file is parsed in this method so the CAN data can be used to identify the message IDs
+        /// </summary>
         public ICommand LoadDbc { get { return new CRelatedCommandNoParam(LoadDbcExecute, CanLoadDbcExecute); } }
         void LoadDbcExecute()
         {
@@ -379,6 +387,10 @@ namespace cangun
                 RaiseFilter();
             }
         }
+
+        /// <summary>
+        /// The filter function for the modifications requests
+        /// </summary>
         private void RaiseFilter()
         {
             if (null != ProjectDtMRs)
@@ -428,6 +440,11 @@ namespace cangun
         {
             return true;
         }
+
+        /// <summary>
+        /// The data access from the database where the data mapping is done
+        /// </summary>
+        /// <param name="pathMRDB"></param>
         void LoadMRDBExecute(object pathMRDB)
         {
             try

@@ -67,7 +67,7 @@ namespace cangun
         }
 
         /// <summary>
-        /// The cloct current value for the running simulation
+        /// The clock current value for the running simulation
         /// </summary>
         public int ClkTime
         {
@@ -204,6 +204,10 @@ namespace cangun
         private BackgroundWorker bwTx = new BackgroundWorker();
         private BackgroundWorker bwRx = new BackgroundWorker();
 
+        /// <summary>
+        /// The construction for the view model and initialization of the predefined values
+        /// there are some default projects added as they are used now in the company
+        /// </summary>
         public CSolutionViewModel()
         {
             _projects.Add(new CProjectViewModel { ProjectName = "BMW Gen4" });
@@ -240,21 +244,43 @@ namespace cangun
 
             _currentTime = 0;
         }
+
+        /// <summary>
+        /// The command for the CAN trafic observation trigger
+        /// </summary>
         public ICommand Start { get { return new CRelatedCommandNoParam(StartExecute, CanStartExecute); } }
 
+        /// <summary>
+        /// The import of the kernel32 is needed to make the Vector driver running
+        /// </summary>
+        /// <param name="handle"></param>
+        /// <param name="timeOut"></param>
+        /// <returns></returns>
         [DllImport("kernel32.dll", SetLastError = true)]
         static extern int WaitForSingleObject(int handle, int timeOut);
 
+        /// <summary>
+        /// Transmit driver fot the CAN trafic
+        /// </summary>
         private XLDriver _xlDriverTx = new XLDriver();
         private int _iEventHandleTx = -1;
         private int _iPortHandleTx = -1;
         UInt64 _ui64TransmitMaskTx = 0;
 
+        /// <summary>
+        /// Recieve driver for the CAN trafic
+        /// </summary>
         private XLDriver _xlDriverRx = new XLDriver();
         private int _iEventHandleRx = -1;
         private int _iPortHandleRx = -1;
         UInt64 _ui64TransmitMaskRx = 0;
 
+        /// <summary>
+        /// The initialization of the Vector CAN driver
+        /// </summary>
+        /// <param name="_iEventHandle"></param>
+        /// <param name="_iPortHandle"></param>
+        /// <param name="_ui64TransmitMask"></param>
         public void xlStartCan(ref int _iEventHandle, ref int _iPortHandle, ref UInt64 _ui64TransmitMask)
         {
             UInt64 ui64AccessMask = 0;
@@ -309,6 +335,15 @@ namespace cangun
             else
                 log("DRIVER-Reset clock success");
         }
+
+        /// <summary>
+        /// Retrieve the signal values from the CAN message
+        /// </summary>
+        /// <param name="byteMessage"></param>
+        /// <param name="value"></param>
+        /// <param name="startBit"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
         private byte[] getMessageValue(byte[] byteMessage, int value, int startBit, int length)
         {
             BitArray bitsMessage = new BitArray(byteMessage);
@@ -322,6 +357,11 @@ namespace cangun
             return byteMessageOut;
         }
 
+        /// <summary>
+        /// The progress changed handler for the background worker
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void bwTx_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             Dictionary<int, CSentMessageViewModel> dicMainCurrentSendetMessages = (Dictionary<int, CSentMessageViewModel>)e.UserState;
@@ -335,7 +375,10 @@ namespace cangun
 
             }
         }
-
+        
+        /// <summary>
+        /// The trigger command for the sequence, which is processed asynchronous
+        /// </summary>
         void StartExecute()
         {
             CurrentSendetMessages.Clear();
@@ -446,10 +489,19 @@ namespace cangun
             CurrentSendetMessages.Clear();
             bwTx.RunWorkerAsync(this._currentSequenceViewModel);
         }
+
+        /// <summary>
+        /// The command enabler
+        /// </summary>
+        /// <returns></returns>
         bool CanStartExecute()
         {
             return ((_currentSequenceViewModel != null) && !bwTx.IsBusy);
         }
+
+        /// <summary>
+        /// The stop command for the sequence
+        /// </summary>
         public ICommand Stop { get { return new CRelatedCommandNoParam(StopExecute, CanStopExecute); } }
         public static void DoEvents()
         {
@@ -472,6 +524,10 @@ namespace cangun
         {
             return bwTx.WorkerSupportsCancellation && bwTx.IsBusy;
         }
+
+        /// <summary>
+        /// The Restart command for the sequence
+        /// </summary>
         public ICommand Restart { get { return new CRelatedCommandNoParam(RestartExecute, CanRestartExecute); } }
         void RestartExecute()
         {
@@ -483,6 +539,9 @@ namespace cangun
             return true;
         }
 
+        /// <summary>
+        /// The start of the time meassurement
+        /// </summary>
         public ICommand ClkStart { get { return new CRelatedCommandNoParam(ClkStartExecute, CanClkStartExecute); } }
         void ClkStartExecute()
         {
@@ -493,6 +552,9 @@ namespace cangun
             return !ClkActive;
         }
 
+        /// <summary>
+        /// The stop of the meassurement
+        /// </summary>
         public ICommand ClkStop { get { return new CRelatedCommandNoParam(ClkStopExecute, CanClkStopExecute); } }
         void ClkStopExecute()
         {
@@ -517,6 +579,9 @@ namespace cangun
             return false;
         }
 
+        /// <summary>
+        /// The observe command
+        /// </summary>
         public ICommand Observe { get { return new CRelatedCommandNoParam(ObserveExecute, CanObserveExecute); } }
         private enum WaitResults : int
         {
@@ -712,6 +777,11 @@ namespace cangun
         {
             return true;
         }
+
+
+        /// <summary>
+        /// Save the solution to the persistant memory
+        /// </summary>
         public ICommand SaveSolution { get { return new CRelatedCommandParam(SaveSolutionExecute, SaveSolutionExecute); } }
         void SaveSolutionExecute(object path)
         {
@@ -739,6 +809,10 @@ namespace cangun
         {
             return true;
         }
+
+        /// <summary>
+        /// Load the solution from the persistant memory
+        /// </summary>
         public ICommand LoadRecentSolution { get { return new CRelatedCommandParam(LoadRecentSolutionExecute, LoadRecentSolutionExecute); } }
         void LoadRecentSolutionExecute(object path)
         {
